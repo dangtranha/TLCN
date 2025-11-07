@@ -1,0 +1,20 @@
+{
+  "name": "northwind-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mongodb.MongoDbConnector",
+    "tasks.max": "1",
+    "database.hostname": "mongo",
+    "database.port": "5432",
+    "database.user": "mongo",
+    "database.password": "mongo",
+    "database.dbname": "northwind",
+    "database.server.name": "northwind_server",
+    "plugin.name": "pgoutput",
+    "slot.name": "northwind_slot",
+    "publication.name": "northwind_pub",
+    "topic.prefix": "northwind",
+    "table.include.list": "public.orders,public.customers,public.order_details,public.products,public.suppliers,public.categories",
+    "tombstones.on.delete": "false",
+    "snapshot.mode": "initial"
+  }
+}
