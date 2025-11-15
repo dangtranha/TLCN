@@ -1,20 +1,25 @@
 {
-  "name": "northwind-connector",
+  "name": "mongo-connector",
   "config": {
     "connector.class": "io.debezium.connector.mongodb.MongoDbConnector",
     "tasks.max": "1",
-    "database.hostname": "mongo",
-    "database.port": "5432",
-    "database.user": "mongo",
-    "database.password": "mongo",
-    "database.dbname": "northwind",
-    "database.server.name": "northwind_server",
-    "plugin.name": "pgoutput",
-    "slot.name": "northwind_slot",
-    "publication.name": "northwind_pub",
-    "topic.prefix": "northwind",
-    "table.include.list": "public.orders,public.customers,public.order_details,public.products,public.suppliers,public.categories",
-    "tombstones.on.delete": "false",
-    "snapshot.mode": "initial"
+
+    "mongodb.hosts": "rs0/mongodb:27017",
+    "mongodb.name": "mongo",
+    
+    "database.include.list": "pipeline",
+    "collection.include.list": "pipeline.sales,pipeline.products",
+
+    "topic.prefix": "mongo",
+    "database.history.kafka.bootstrap.servers": "kafka:9092",
+    "database.history.kafka.topic": "dbhistory.mongo",
+
+    "snapshot.mode": "initial",
+
+    "heartbeat.interval.ms": "10000",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.deadletterqueue.topic.name": "mongo.errors",
+    "errors.deadletterqueue.context.headers.enable": "true"
   }
 }
