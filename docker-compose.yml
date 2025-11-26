@@ -7,14 +7,7 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
-  mongodb:
-    image: mongo:6.0
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    command: ["mongod", "--replSet", "rs0", "--bind_ip_all","--noauth"]
-    volumes:
-      - ./mongodb/init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+ 
   kafka:
     image: confluentinc/cp-kafka:7.3.0
     ports:
