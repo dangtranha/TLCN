@@ -1,37 +1,61 @@
 services:
-
+  # 1. Database Source (Postgres)
   postgres:
     image: postgres:13
+    container_name: postgres_source
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: erp_db  # Đặt tên DB cụ thể
     ports:
       - "5432:5432"
- 
+    volumes:
+      # Lưu dữ liệu DB để không bị mất khi restart
+      - postgres_data:/var/lib/postgresql/data
+      # Tự động chạy script SQL khi khởi tạo lần đầu
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Mount thư mục CSV vào container để lệnh COPY đọc được
+      - ./files:/data_files
+    networks:
+      - data-pipeline-network
+
+  # 2. Zookeeper (Quản lý Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - data-pipeline-network
+
+  # 3. Kafka (Message Broker)
   kafka:
     image: confluentinc/cp-kafka:7.3.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
     ports:
       - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # Cấu hình Listener: Internal (cho Debezium/Spark) & External (cho máy local của bạn)
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      # AWS_ACCESS_KEY_ID: minioadmin
-      # AWS_SECRET_ACCESS_KEY: minioadmin
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
+    networks:
+      - data-pipeline-network
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.0
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-
+  # 4. Debezium Connect (CDC - Capture Data Change)
   connect:
     image: debezium/connect:2.1
+    container_name: debezium_connect
+    depends_on:
+      - kafka
+      - postgres
     ports:
       - "8083:8083"
     environment:
@@ -40,12 +64,31 @@ services:
       OFFSET_STORAGE_TOPIC: my_connect_offsets
       STATUS_STORAGE_TOPIC: my_connect_statuses
       BOOTSTRAP_SERVERS: kafka:29092
-      CONNECT_PLUGIN_PATH: /kafka/connect,/kafka/connect/s3
+      # Đường dẫn plugin nếu bạn cài thêm S3 sink hoặc JDBC sink
+      CONNECT_PLUGIN_PATH: /kafka/connect,/kafka/connect/plugins
     volumes:
-      - ./debezium/plugins:/kafka/connect/s3
-    depends_on:
-      - kafka
+      # Nếu bạn có plugin custom, bỏ vào thư mục ./debezium/plugins
+      - ./debezium/plugins:/kafka/connect/plugins
+    networks:
+      - data-pipeline-network
 
+  # 5. MinIO (Data Lake Storage - Thay thế S3)
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    networks:
+      - data-pipeline-network
+
+  # 6. Spark Master (Xử lý dữ liệu)
   spark-master:
     image: apache/spark:3.4.0
     container_name: spark-master
@@ -58,11 +101,14 @@ services:
       - "8080:8080"
     environment:
       - SPARK_NO_DAEMONIZE=true
+      # Cấu hình để Spark nói chuyện được với MinIO
       - MINIO_ENDPOINT=http://minio:9000
       - MINIO_ACCESS_KEY=minioadmin
       - MINIO_SECRET_KEY=minioadmin
-      - MINIO_BUCKET=data-lake
+    networks:
+      - data-pipeline-network
 
+  # 7. Spark Worker
   spark-worker:
     image: apache/spark:3.4.0
     container_name: spark-worker
@@ -74,20 +120,13 @@ services:
       spark://spark-master:7077
     environment:
       - SPARK_NO_DAEMONIZE=true
-
-  minio:
-    image: quay.io/minio/minio:latest
-    container_name: minio
-    command: server /data --console-address ":9001"
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    volumes:
-      - ./minio/bucket:/data
+    networks:
+      - data-pipeline-network
 
 networks:
-  default:
-    name: data-pipeline-network
+  data-pipeline-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  minio_data:

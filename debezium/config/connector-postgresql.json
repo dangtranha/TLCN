@@ -1,0 +1,21 @@
+{
+  "name": "phucthanhkhang-erp-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "postgres",
+    "database.dbname": "erp_db", 
+    "database.server.name": "erp_server",
+    "plugin.name": "pgoutput",
+    "slot.name": "erp_debezium_slot",
+    "publication.name": "erp_debezium_pub",
+    "topic.prefix": "ptk_erp",
+    "table.include.list": "public.branches,public.products,public.customers,public.suppliers,public.inventory_stocks,public.invoices,public.invoice_items",
+    "tombstones.on.delete": "false",
+    "snapshot.mode": "initial",
+    "decimal.handling.mode": "string"
+  }
+}

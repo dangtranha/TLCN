@@ -4,7 +4,7 @@
     "connector.class": "io.confluent.connect.s3.S3SinkConnector",
     "tasks.max": "1",
 
-    "topics": "mongo.pipeline.sales,mongo.pipeline.products",
+    "topics": "ptk_erp.public.branches,ptk_erp.public.customers,ptk_erp.public.inventory_stocks,ptk_erp.public.invoice_items,ptk_erp.public.invoices,ptk_erp.public.products,ptk_erp.public.suppliers",
 
     "s3.bucket.name": "bronze",
     "s3.region": "us-east-1",
