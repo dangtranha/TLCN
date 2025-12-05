@@ -1,0 +1,29 @@
+customers:
+  bronze: processed_merged_customers
+  silver: customers
+  pk: [customer_id]
+
+products:
+  bronze: processed_merged_products
+  silver: products
+  pk: [product_id]
+
+suppliers:
+  bronze: processed_merged_suppliers
+  silver: suppliers
+  pk: [supplier_id]
+
+branches:
+  bronze: branches.csv
+  silver: branches
+  pk: [branch_id]
+
+invoice_details:
+  bronze: processed_merged_invoice_details
+  silver: invoice_details
+  pk: [invoice_id]
+
+inventory_stocks:
+  bronze: inventory_stocks.csv
+  silver: inventory_stocks
+  pk: [product_id, branch_id]
