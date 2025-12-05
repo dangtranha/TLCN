@@ -6,16 +6,13 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: erp_db  # Đặt tên DB cụ thể
+      POSTGRES_DB: erp_db
     ports:
       - "5432:5432"
     volumes:
-      # Lưu dữ liệu DB để không bị mất khi restart
       - postgres_data:/var/lib/postgresql/data
-      # Tự động chạy script SQL khi khởi tạo lần đầu
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-      # Mount thư mục CSV vào container để lệnh COPY đọc được
-      - ./files:/data_files
+      - ./import/Data/processed:/import_data
     networks:
       - data-pipeline-network
 

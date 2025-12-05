@@ -5,148 +5,155 @@ CREATE TABLE branches (
     branch_id VARCHAR(50) PRIMARY KEY,
     branch_name TEXT,
     branch_type VARCHAR(20),
-    address TEXT,
     status VARCHAR(20) DEFAULT 'ACTIVE'
 );
 
 CREATE TABLE products (
+    product_type TEXT,
+    category_3_level TEXT,
     product_id VARCHAR(50) PRIMARY KEY,
+    barcode TEXT,
     product_name TEXT,
-    category TEXT,
     brand TEXT,
-    unit VARCHAR(50), 
-    sale_price NUMERIC(15, 2),
-    cost_price NUMERIC(15, 2),
-    unit_of_measure VARCHAR(50),
-    is_for_sale INTEGER
+    sale_price NUMERIC(15,2),
+    cost_price NUMERIC(15,2),
+    stock_quantity NUMERIC(15,2),
+    reserved_quantity NUMERIC(15,2),
+    estimated_oos_date TEXT, -- không phải date trong sample
+    min_stock_threshold NUMERIC(15,2),
+    max_stock_threshold NUMERIC(15,2),
+    unit_of_measure TEXT,
+    base_unit_code TEXT,
+    conversion_rate NUMERIC(15,2),
+    attributes TEXT,
+    related_product_code TEXT,
+    image_urls TEXT,
+    weight_gram NUMERIC(15,2),
+    is_active INTEGER,
+    is_direct_sale INTEGER,
+    description TEXT,
+    note_template TEXT,
+    location TEXT,
+    component_items TEXT,
+    warranty_period TEXT,
+    maintenance_cycle TEXT
 );
 
 CREATE TABLE customers (
+    customer_type TEXT,
+    created_branch_id VARCHAR(20),  -- chuẩn hóa đúng quy định
     customer_id VARCHAR(50) PRIMARY KEY,
     customer_name TEXT,
-    phone VARCHAR(50),
+    phone TEXT,
     address TEXT,
+    shipping_area TEXT,
+    ward_commune TEXT,
+    company_name TEXT,
+    tax_id TEXT,
+    identity_card_number TEXT,
+    dob TEXT,
+    gender TEXT,
+    email TEXT,
+    facebook_url TEXT,
     customer_group TEXT,
-    current_debt NUMERIC(15, 2),
+    note TEXT,
+    created_by TEXT,
+    created_at TIMESTAMP,
+    last_transaction_date DATE,
+    current_debt NUMERIC(18,2),
+    total_sales NUMERIC(18,2),
+    net_sales NUMERIC(18,2),
     status INTEGER
 );
 
 CREATE TABLE suppliers (
     supplier_id VARCHAR(50) PRIMARY KEY,
     supplier_name TEXT,
-    phone VARCHAR(50),
+    email TEXT,
+    phone TEXT,
     address TEXT,
-    tax_id VARCHAR(50),
-    current_liability NUMERIC(15, 2),
-    status INTEGER
+    area TEXT,
+    ward_commune TEXT,
+    total_purchased NUMERIC(18,2),
+    current_liability NUMERIC(18,2),
+    tax_id TEXT,
+    note TEXT,
+    supplier_group TEXT,
+    status INTEGER,
+    net_purchased NUMERIC(18,2),
+    branch_id VARCHAR(20),  -- ✨ thay branch_name
+    company_name TEXT,
+    created_by TEXT,
+    created_at TIMESTAMP,
+    FOREIGN KEY (branch_id) REFERENCES branches(branch_id)
 );
 
 CREATE TABLE inventory_stocks (
     branch_id VARCHAR(50),
     product_id VARCHAR(50),
     quantity_on_hand NUMERIC(15, 2),
-    PRIMARY KEY (branch_id, product_id)
+    PRIMARY KEY (branch_id, product_id),
+    FOREIGN KEY (branch_id) REFERENCES branches(branch_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
 CREATE TABLE invoices (
     invoice_id VARCHAR(50) PRIMARY KEY,
+    branch_id VARCHAR(20),
     created_at TIMESTAMP,
+    updated_at TIMESTAMP,
     status VARCHAR(50),
-    subtotal NUMERIC(15, 2),
-    invoice_discount NUMERIC(15, 2),
-    total_amount NUMERIC(15, 2),
+    shipping_status VARCHAR(50),
+    subtotal NUMERIC(18,2),
+    invoice_discount NUMERIC(18,2),
+    total_amount NUMERIC(18,2),
+    amount_paid NUMERIC(18,2),
     salesperson_name TEXT,
     customer_id VARCHAR(50),
-    branch_id VARCHAR(50)
+    note TEXT,
+    FOREIGN KEY (branch_id) REFERENCES branches(branch_id)
 );
 
 CREATE TABLE invoice_items (
     invoice_item_id SERIAL PRIMARY KEY,
     invoice_id VARCHAR(50),
     product_id VARCHAR(50),
-    quantity NUMERIC(15, 2),
-    unit_price NUMERIC(15, 2),
-    sale_price NUMERIC(15, 2),
-    line_total NUMERIC(15, 2)
+    barcode TEXT,
+    product_name TEXT,
+    brand TEXT,
+    unit_of_measure TEXT,
+    quantity NUMERIC(18,2),
+    unit_price NUMERIC(18,2),
+    item_discount_amount NUMERIC(18,2),
+    sale_price NUMERIC(18,2),
+    line_total NUMERIC(18,2),
+    warranty TEXT,
+    maintenance_cycle TEXT,
+    FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id)
 );
 
--- =============================================
--- 2. IMPORT DỮ LIỆU (Dùng Bảng Tạm cho các file lệch cột)
--- =============================================
 
--- 2.1 Branches (File khớp cột -> COPY trực tiếp)
+-- =============================================
 COPY branches(branch_id, branch_name, branch_type) 
-FROM '/data_files/branches.csv' DELIMITER ',' CSV HEADER;
+FROM '/import_data/branches.csv' DELIMITER ',' CSV HEADER;
 
--- 2.2 Products (File thừa cột -> Dùng Staging)
-CREATE TEMP TABLE staging_products (
-    category TEXT, product_id TEXT, barcode TEXT, product_name TEXT, brand TEXT,
-    unit TEXT, sale_price NUMERIC, cost_price NUMERIC, total_stock NUMERIC,
-    unit_of_measure TEXT, is_for_sale INTEGER
-);
-COPY staging_products FROM '/data_files/processed_merged_products.csv' DELIMITER ',' CSV HEADER;
+COPY products(product_type, category_3_level, product_id, barcode, product_name, brand, sale_price, cost_price, stock_quantity, reserved_quantity, estimated_oos_date, min_stock_threshold, max_stock_threshold, unit_of_measure, base_unit_code, conversion_rate, attributes, related_product_code, image_urls, weight_gram, is_active, is_direct_sale, description, note_template, location, component_items, warranty_period, maintenance_cycle) 
+FROM '/import_data/processed_merged_products.csv' DELIMITER ',' CSV HEADER;
 
-INSERT INTO products (product_id, product_name, category, brand, unit, sale_price, cost_price, unit_of_measure, is_for_sale)
-SELECT product_id, product_name, category, brand, unit, sale_price, cost_price, unit_of_measure, is_for_sale 
-FROM staging_products;
-DROP TABLE staging_products;
-
--- 2.3 Customers (File thừa cột -> Dùng Staging)
-CREATE TEMP TABLE staging_customers (
-    customer_id TEXT, customer_name TEXT, phone TEXT, address TEXT, company_name TEXT,
-    tax_id TEXT, customer_group TEXT, note TEXT, created_at TIMESTAMP,
-    current_debt NUMERIC, net_sales NUMERIC, status INTEGER
-);
-COPY staging_customers FROM '/data_files/processed_merged_customers.csv' DELIMITER ',' CSV HEADER;
-
-INSERT INTO customers (customer_id, customer_name, phone, address, customer_group, current_debt, status)
-SELECT customer_id, customer_name, phone, address, customer_group, current_debt, status 
-FROM staging_customers;
-DROP TABLE staging_customers;
-
--- 2.4 Suppliers (File thừa cột -> Dùng Staging)
-CREATE TEMP TABLE staging_suppliers (
-    supplier_id TEXT, supplier_name TEXT, phone TEXT, address TEXT,
-    total_purchased NUMERIC, current_liability NUMERIC, tax_id TEXT,
-    note TEXT, status INTEGER, net_purchased NUMERIC, created_at TIMESTAMP
-);
-COPY staging_suppliers FROM '/data_files/processed_merged_suppliers.csv' DELIMITER ',' CSV HEADER;
-
-INSERT INTO suppliers (supplier_id, supplier_name, phone, address, tax_id, current_liability, status)
-SELECT supplier_id, supplier_name, phone, address, tax_id, current_liability, status 
-FROM staging_suppliers;
-DROP TABLE staging_suppliers;
-
--- 2.5 Inventory Stocks (File khớp cột -> COPY trực tiếp)
 COPY inventory_stocks(branch_id, product_id, quantity_on_hand) 
-FROM '/data_files/inventory_stocks.csv' DELIMITER ',' CSV HEADER;
+FROM '/import_data/inventory_stocks.csv' DELIMITER ',' CSV HEADER;
 
--- 2.6 Invoices (File gộp -> Dùng Staging & Tách)
-CREATE TEMP TABLE staging_invoices (
-    branch_name TEXT, invoice_id VARCHAR(50), created_at TIMESTAMP,
-    customer_id VARCHAR(50), customer_name TEXT, salesperson_name TEXT,
-    sales_channel TEXT, created_by TEXT, note TEXT,
-    subtotal NUMERIC, invoice_discount NUMERIC, total_amount NUMERIC,
-    amount_paid NUMERIC, status TEXT, product_id VARCHAR(50),
-    product_name TEXT, unit_of_measure TEXT, quantity NUMERIC,
-    unit_price NUMERIC, item_discount_amount NUMERIC, sale_price NUMERIC,
-    line_total NUMERIC
-);
-COPY staging_invoices FROM '/data_files/processed_merged_invoice_details.csv' DELIMITER ',' CSV HEADER;
+COPY customers( created_branch_id, customer_type, customer_id, customer_name, phone, address, shipping_area, ward_commune, company_name, tax_id, identity_card_number, dob, gender, email, facebook_url, customer_group, note, created_by, created_at, last_transaction_date, current_debt, total_sales, net_sales, status ) 
+FROM '/import_data/processed_merged_customers.csv' DELIMITER ',' CSV HEADER;
 
--- Insert vào Header
-INSERT INTO invoices (invoice_id, created_at, status, subtotal, invoice_discount, total_amount, salesperson_name, customer_id, branch_id)
-SELECT DISTINCT 
-    t.invoice_id, t.created_at, t.status, t.subtotal, t.invoice_discount, 
-    t.total_amount, t.salesperson_name, t.customer_id, b.branch_id
-FROM staging_invoices t 
-LEFT JOIN branches b ON t.branch_name = b.branch_name;
+COPY suppliers ( branch_id, supplier_id, supplier_name, email, phone, address, area, ward_commune, total_purchased, current_liability, tax_id, note, supplier_group, status, net_purchased, company_name, created_by, created_at ) 
+FROM '/import_data/processed_merged_suppliers.csv' DELIMITER ',' CSV HEADER;
 
--- Insert vào Details
-INSERT INTO invoice_items (invoice_id, product_id, quantity, unit_price, sale_price, line_total)
-SELECT invoice_id, product_id, quantity, unit_price, sale_price, line_total 
-FROM staging_invoices;
+COPY invoices ( invoice_id, branch_id, created_at, updated_at, status, shipping_status, subtotal, invoice_discount, total_amount, amount_paid, salesperson_name, customer_id, note )
+FROM '/import_data/invoices.csv' DELIMITER ',' CSV HEADER;
 
-DROP TABLE staging_invoices;
+COPY invoice_items ( invoice_id, product_id, barcode, product_name, brand, unit_of_measure, quantity, unit_price, item_discount_amount, sale_price, line_total, warranty, maintenance_cycle )
+FROM '/import_data/invoice_items.csv' DELIMITER ',' CSV HEADER;
+
 ALTER SYSTEM SET wal_level = 'logical';
 CREATE PUBLICATION erp_debezium_pub FOR ALL TABLES;
