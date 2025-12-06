@@ -157,3 +157,6 @@ FROM '/import_data/invoice_items.csv' DELIMITER ',' CSV HEADER;
 
 ALTER SYSTEM SET wal_level = 'logical';
 CREATE PUBLICATION erp_debezium_pub FOR ALL TABLES;
+
+
+CREATE DATABASE erp_serving;

@@ -13,12 +13,12 @@ def main():
         .getOrCreate()
 
     # Chạy lần lượt các ETL
-    #etl_branches.run(spark)
-    #etl_customers.run(spark)
-    #etl_inventory_stocks.run(spark)
-    #etl_invoice_details.run(spark)
-    #etl_invoices.run(spark)
-    #etl_products.run(spark)
+    etl_branches.run(spark)
+    etl_customers.run(spark)
+    etl_inventory_stocks.run(spark)
+    etl_invoice_details.run(spark)
+    etl_invoices.run(spark)
+    etl_products.run(spark)
     etl_suppliers.run_etl(spark)
 
     spark.stop()

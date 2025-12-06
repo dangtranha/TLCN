@@ -1,5 +1,4 @@
 services:
-  # 1. Database Source (Postgres)
   postgres:
     image: postgres:13
     container_name: postgres_source
@@ -16,7 +15,6 @@ services:
     networks:
       - data-pipeline-network
 
-  # 2. Zookeeper (Quản lý Kafka)
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
     container_name: zookeeper
@@ -28,7 +26,6 @@ services:
     networks:
       - data-pipeline-network
 
-  # 3. Kafka (Message Broker)
   kafka:
     image: confluentinc/cp-kafka:7.3.0
     container_name: kafka
@@ -39,14 +36,12 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      # Cấu hình Listener: Internal (cho Debezium/Spark) & External (cho máy local của bạn)
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - data-pipeline-network
 
-  # 4. Debezium Connect (CDC - Capture Data Change)
   connect:
     image: debezium/connect:2.1
     container_name: debezium_connect
@@ -61,15 +56,12 @@ services:
       OFFSET_STORAGE_TOPIC: my_connect_offsets
       STATUS_STORAGE_TOPIC: my_connect_statuses
       BOOTSTRAP_SERVERS: kafka:29092
-      # Đường dẫn plugin nếu bạn cài thêm S3 sink hoặc JDBC sink
       CONNECT_PLUGIN_PATH: /kafka/connect,/kafka/connect/plugins
     volumes:
-      # Nếu bạn có plugin custom, bỏ vào thư mục ./debezium/plugins
       - ./debezium/plugins:/kafka/connect/plugins
     networks:
       - data-pipeline-network
 
-  # 5. MinIO (Data Lake Storage - Thay thế S3)
   minio:
     image: quay.io/minio/minio:latest
     container_name: minio
@@ -85,7 +77,6 @@ services:
     networks:
       - data-pipeline-network
 
-  # 6. Spark Master (Xử lý dữ liệu)
   spark-master:
     image: apache/spark:3.4.0
     container_name: spark-master
@@ -98,14 +89,12 @@ services:
       - "8080:8080"
     environment:
       - SPARK_NO_DAEMONIZE=true
-      # Cấu hình để Spark nói chuyện được với MinIO
       - MINIO_ENDPOINT=http://minio:9000
       - MINIO_ACCESS_KEY=minioadmin
       - MINIO_SECRET_KEY=minioadmin
     networks:
       - data-pipeline-network
 
-  # 7. Spark Worker
   spark-worker:
     image: apache/spark:3.4.0
     container_name: spark-worker
@@ -120,6 +109,19 @@ services:
     networks:
       - data-pipeline-network
   
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    networks:
+      - data-pipeline-network
+    depends_on:
+      - postgres_source
+
 networks:
   data-pipeline-network:
     driver: bridge
@@ -127,3 +129,4 @@ networks:
 volumes:
   postgres_data:
   minio_data:
+  superset_home:
