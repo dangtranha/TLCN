@@ -10,14 +10,12 @@ def run(spark):
     df_after = df.selectExpr("after.branch_id as branch_id",
                          "after.branch_name as branch_name",
                          "after.branch_type as branch_type",
-                         "after.address as address",
                          "after.status as status")
     df_clean = (
         df_after
         .withColumn("branch_id", F.col("branch_id").cast("string"))
         .withColumn("branch_name", F.trim(F.col("branch_name")))
         .withColumn("branch_type", F.trim(F.col("branch_type")))
-        .withColumn("address", F.trim(F.col("address")))
         .withColumn("status", F.trim(F.col("status")))
         .withColumn("etl_loaded_at", F.current_timestamp())
     )
