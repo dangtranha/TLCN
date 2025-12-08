@@ -76,7 +76,12 @@ services:
       - minio_data:/data
     networks:
       - data-pipeline-network
-
+  minio-mc:
+    image: minio/mc
+    container_name: minio-mc
+    entrypoint: sleep infinity
+    networks:
+      - data-pipeline-network
   spark-master:
     image: apache/spark:3.4.0
     container_name: spark-master
@@ -88,13 +93,31 @@ services:
       - "7077:7077"
       - "8080:8080"
     environment:
-      - SPARK_NO_DAEMONIZE=true
-      - MINIO_ENDPOINT=http://minio:9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=minioadmin
+      # Postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: tlcn
+      POSTGRES_USER: etl
+      POSTGRES_PASSWORD: etl123
+
+      # MinIO
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_SSL: "false"
+
+      BRONZE_BUCKET: bronze
+      SILVER_BUCKET: silver
+
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+    volumes:
+      - ./batch-etl:/opt/spark/work-dir/batch-etl
+      - ./batch-etl/jars/postgresql-42.7.1.jar:/opt/spark/jars/postgresql-42.7.1.jar
+
     networks:
       - data-pipeline-network
-
+    
   spark-worker:
     image: apache/spark:3.4.0
     container_name: spark-worker
@@ -105,7 +128,10 @@ services:
       org.apache.spark.deploy.worker.Worker
       spark://spark-master:7077
     environment:
-      - SPARK_NO_DAEMONIZE=true
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+    volumes:
+      - ./batch-etl:/opt/spark/work-dir/batch-etl
     networks:
       - data-pipeline-network
   
@@ -120,12 +146,43 @@ services:
     networks:
       - data-pipeline-network
     depends_on:
-      - postgres_source
+      - postgres
 
+  airflow:
+    image: apache/airflow:2.11.0
+    container_name: airflow
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: "LocalExecutor"
+      AIRFLOW__CORE__AUTH_MANAGER: airflow.providers.fab.auth_manager.fab_auth_manager.FabAuthManager
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres_source:5432/airflow_db
+      AIRFLOW__LOGGING__LOGGING_LEVEL: INFO
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/airflow_logs:/opt/airflow/logs
+      - ./debezium/config:/opt/debezium_config
+      - /var/run/docker.sock:/var/run/docker.sock 
+    ports:
+      - "8081:8080"
+    networks:
+      - data-pipeline-network
+    command: >
+      bash -c "
+        until pg_isready -h postgres_source -U postgres; do
+          echo 'Waiting for Postgres...';
+          sleep 20;
+        done;
+        airflow db init;
+        airflow db migrate;
+        airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin;
+        airflow scheduler &
+        airflow webserver
+      "
+    depends_on:
+      - postgres
 networks:
   data-pipeline-network:
     driver: bridge
-
 volumes:
   postgres_data:
   minio_data:

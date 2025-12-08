@@ -1,0 +1,21 @@
+[2025-12-07T16:27:04.988+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-07T16:27:05.014+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: init_minio_buckets.create_bucket_gold manual__2025-12-07T16:27:03.108944+00:00 [queued]>
+[2025-12-07T16:27:05.025+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: init_minio_buckets.create_bucket_gold manual__2025-12-07T16:27:03.108944+00:00 [queued]>
+[2025-12-07T16:27:05.026+0000] {taskinstance.py:2884} INFO - Starting attempt 1 of 3
+[2025-12-07T16:27:05.060+0000] {taskinstance.py:2907} INFO - Executing <Task(BashOperator): create_bucket_gold> on 2025-12-07 16:27:03.108944+00:00
+[2025-12-07T16:27:05.071+0000] {logging_mixin.py:190} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=252) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-12-07T16:27:05.073+0000] {standard_task_runner.py:72} INFO - Started process 253 to run task
+[2025-12-07T16:27:05.071+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'init_minio_buckets', 'create_bucket_gold', 'manual__2025-12-07T16:27:03.108944+00:00', '--job-id', '3', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmpw212x_sx']
+[2025-12-07T16:27:05.075+0000] {standard_task_runner.py:105} INFO - Job 3: Subtask create_bucket_gold
+[2025-12-07T16:27:05.152+0000] {task_command.py:467} INFO - Running <TaskInstance: init_minio_buckets.create_bucket_gold manual__2025-12-07T16:27:03.108944+00:00 [running]> on host ba83cd541ee5
+[2025-12-07T16:27:05.249+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='init_minio_buckets' AIRFLOW_CTX_TASK_ID='create_bucket_gold' AIRFLOW_CTX_EXECUTION_DATE='2025-12-07T16:27:03.108944+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-12-07T16:27:03.108944+00:00'
+[2025-12-07T16:27:05.250+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2025-12-07T16:27:05.267+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-12-07T16:27:05.269+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'docker exec minio-mc mc mb local/gold || true']
+[2025-12-07T16:27:05.282+0000] {subprocess.py:99} INFO - Output:
+[2025-12-07T16:27:05.441+0000] {subprocess.py:106} INFO - Bucket created successfully `local/gold`.
+[2025-12-07T16:27:05.455+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2025-12-07T16:27:05.484+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2025-12-07T16:27:05.485+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=init_minio_buckets, task_id=create_bucket_gold, run_id=manual__2025-12-07T16:27:03.108944+00:00, execution_date=20251207T162703, start_date=20251207T162705, end_date=20251207T162705
+[2025-12-07T16:27:05.530+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-12-07T16:27:05.541+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

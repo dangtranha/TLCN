@@ -1,0 +1,25 @@
+[2025-12-07T16:19:26.449+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-07T16:19:26.482+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: init_minio_buckets.create_minio_connector manual__2025-12-07T16:19:21.367113+00:00 [queued]>
+[2025-12-07T16:19:26.498+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: init_minio_buckets.create_minio_connector manual__2025-12-07T16:19:21.367113+00:00 [queued]>
+[2025-12-07T16:19:26.499+0000] {taskinstance.py:2884} INFO - Starting attempt 1 of 3
+[2025-12-07T16:19:26.517+0000] {taskinstance.py:2907} INFO - Executing <Task(BashOperator): create_minio_connector> on 2025-12-07 16:19:21.367113+00:00
+[2025-12-07T16:19:26.532+0000] {logging_mixin.py:190} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=341) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-12-07T16:19:26.534+0000] {standard_task_runner.py:72} INFO - Started process 342 to run task
+[2025-12-07T16:19:26.532+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'init_minio_buckets', 'create_minio_connector', 'manual__2025-12-07T16:19:21.367113+00:00', '--job-id', '8', '--raw', '--subdir', 'DAGS_FOLDER/pipeline.py', '--cfg-path', '/tmp/tmpj2e94h97']
+[2025-12-07T16:19:26.536+0000] {standard_task_runner.py:105} INFO - Job 8: Subtask create_minio_connector
+[2025-12-07T16:19:26.633+0000] {task_command.py:467} INFO - Running <TaskInstance: init_minio_buckets.create_minio_connector manual__2025-12-07T16:19:21.367113+00:00 [running]> on host 0631d4152404
+[2025-12-07T16:19:26.761+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='init_minio_buckets' AIRFLOW_CTX_TASK_ID='create_minio_connector' AIRFLOW_CTX_EXECUTION_DATE='2025-12-07T16:19:21.367113+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-12-07T16:19:21.367113+00:00'
+[2025-12-07T16:19:26.762+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2025-12-07T16:19:26.779+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-12-07T16:19:26.780+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', '\n            curl -X POST http://connect:8083/connectors             -H "Content-Type: application/json"             -d @/opt/debezium_config/connector-minio.json\n        ']
+[2025-12-07T16:19:26.796+0000] {subprocess.py:99} INFO - Output:
+[2025-12-07T16:19:26.843+0000] {subprocess.py:106} INFO -   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+[2025-12-07T16:19:26.844+0000] {subprocess.py:106} INFO -                                  Dload  Upload   Total   Spent    Left  Speed
+[2025-12-07T16:19:27.050+0000] {subprocess.py:106} INFO -   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1644  100   802  100   842   3861   4054 --:--:-- --:--:-- --:--:--  7942
+[2025-12-07T16:19:27.054+0000] {subprocess.py:106} INFO - {"name":"s3-sink-minio","config":{"connector.class":"io.confluent.connect.s3.S3SinkConnector","tasks.max":"1","topics":"ptk_erp.public.branches,ptk_erp.public.customers,ptk_erp.public.inventory_stocks,ptk_erp.public.invoice_items,ptk_erp.public.invoices,ptk_erp.public.products,ptk_erp.public.suppliers","s3.bucket.name":"bronze","s3.region":"us-east-1","storage.class":"io.confluent.connect.s3.storage.S3Storage","format.class":"io.confluent.connect.s3.format.json.JsonFormat","schema.compatibility":"NONE","s3.endpoint":"http://minio:9000","s3.path.style.access":"true","store.url":"http://minio:9000","aws.access.key.id":"minioadmin","aws.secret.access.key":"minioadmin","flush.size":"1","behavior.on.null.values":"ignore","behavior.on.error":"fail","name":"s3-sink-minio"},"tasks":[],"type":"sink"}
+[2025-12-07T16:19:27.056+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2025-12-07T16:19:27.119+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2025-12-07T16:19:27.120+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=init_minio_buckets, task_id=create_minio_connector, run_id=manual__2025-12-07T16:19:21.367113+00:00, execution_date=20251207T161921, start_date=20251207T161926, end_date=20251207T161927
+[2025-12-07T16:19:27.194+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-12-07T16:19:27.222+0000] {taskinstance.py:3924} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-12-07T16:19:27.225+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

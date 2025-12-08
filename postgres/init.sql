@@ -160,3 +160,5 @@ CREATE PUBLICATION erp_debezium_pub FOR ALL TABLES;
 
 
 CREATE DATABASE erp_serving;
+CREATE DATABASE airflow_db;
+
