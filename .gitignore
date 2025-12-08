@@ -2,3 +2,9 @@ minio/bucket/bronze/*
 minio/bucket/silver/*
 minio/bucket/gold/*
 minio/bucket/.minio.sys/
+__pycache__/
+*.py[cod]
+.env
+.DS_Store
+.idea/
+.vscode/

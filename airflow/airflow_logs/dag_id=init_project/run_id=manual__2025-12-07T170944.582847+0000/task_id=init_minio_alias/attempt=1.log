@@ -1,0 +1,22 @@
+[2025-12-07T17:09:45.436+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-07T17:09:45.458+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: init_project.init_minio_alias manual__2025-12-07T17:09:44.582847+00:00 [queued]>
+[2025-12-07T17:09:45.466+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: init_project.init_minio_alias manual__2025-12-07T17:09:44.582847+00:00 [queued]>
+[2025-12-07T17:09:45.467+0000] {taskinstance.py:2884} INFO - Starting attempt 1 of 3
+[2025-12-07T17:09:45.480+0000] {taskinstance.py:2907} INFO - Executing <Task(BashOperator): init_minio_alias> on 2025-12-07 17:09:44.582847+00:00
+[2025-12-07T17:09:45.489+0000] {logging_mixin.py:190} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=278) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-12-07T17:09:45.491+0000] {standard_task_runner.py:72} INFO - Started process 279 to run task
+[2025-12-07T17:09:45.490+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'init_project', 'init_minio_alias', 'manual__2025-12-07T17:09:44.582847+00:00', '--job-id', '2', '--raw', '--subdir', 'DAGS_FOLDER/init.py', '--cfg-path', '/tmp/tmp1l83kz_e']
+[2025-12-07T17:09:45.493+0000] {standard_task_runner.py:105} INFO - Job 2: Subtask init_minio_alias
+[2025-12-07T17:09:45.579+0000] {task_command.py:467} INFO - Running <TaskInstance: init_project.init_minio_alias manual__2025-12-07T17:09:44.582847+00:00 [running]> on host d27295d18a87
+[2025-12-07T17:09:45.679+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='init_project' AIRFLOW_CTX_TASK_ID='init_minio_alias' AIRFLOW_CTX_EXECUTION_DATE='2025-12-07T17:09:44.582847+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-12-07T17:09:44.582847+00:00'
+[2025-12-07T17:09:45.680+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2025-12-07T17:09:45.730+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-12-07T17:09:45.732+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'docker exec minio-mc mc alias set local http://minio:9000 minioadmin minioadmin']
+[2025-12-07T17:09:45.746+0000] {subprocess.py:99} INFO - Output:
+[2025-12-07T17:09:46.099+0000] {subprocess.py:106} INFO - Added `local` successfully.
+[2025-12-07T17:09:46.111+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2025-12-07T17:09:46.146+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2025-12-07T17:09:46.147+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=init_project, task_id=init_minio_alias, run_id=manual__2025-12-07T17:09:44.582847+00:00, execution_date=20251207T170944, start_date=20251207T170945, end_date=20251207T170946
+[2025-12-07T17:09:46.190+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-12-07T17:09:46.232+0000] {taskinstance.py:3924} INFO - 3 downstream tasks scheduled from follow-on schedule check
+[2025-12-07T17:09:46.234+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

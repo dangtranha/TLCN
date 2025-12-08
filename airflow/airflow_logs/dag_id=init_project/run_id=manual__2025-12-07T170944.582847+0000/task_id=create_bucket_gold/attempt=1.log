@@ -1,0 +1,22 @@
+[2025-12-07T17:09:46.475+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-07T17:09:46.506+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: init_project.create_bucket_gold manual__2025-12-07T17:09:44.582847+00:00 [queued]>
+[2025-12-07T17:09:46.518+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: init_project.create_bucket_gold manual__2025-12-07T17:09:44.582847+00:00 [queued]>
+[2025-12-07T17:09:46.519+0000] {taskinstance.py:2884} INFO - Starting attempt 1 of 3
+[2025-12-07T17:09:46.536+0000] {taskinstance.py:2907} INFO - Executing <Task(BashOperator): create_bucket_gold> on 2025-12-07 17:09:44.582847+00:00
+[2025-12-07T17:09:46.551+0000] {logging_mixin.py:190} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=293) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-12-07T17:09:46.554+0000] {standard_task_runner.py:72} INFO - Started process 296 to run task
+[2025-12-07T17:09:46.552+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'init_project', 'create_bucket_gold', 'manual__2025-12-07T17:09:44.582847+00:00', '--job-id', '5', '--raw', '--subdir', 'DAGS_FOLDER/init.py', '--cfg-path', '/tmp/tmpfm62yc8x']
+[2025-12-07T17:09:46.556+0000] {standard_task_runner.py:105} INFO - Job 5: Subtask create_bucket_gold
+[2025-12-07T17:09:46.654+0000] {task_command.py:467} INFO - Running <TaskInstance: init_project.create_bucket_gold manual__2025-12-07T17:09:44.582847+00:00 [running]> on host d27295d18a87
+[2025-12-07T17:09:46.750+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='init_project' AIRFLOW_CTX_TASK_ID='create_bucket_gold' AIRFLOW_CTX_EXECUTION_DATE='2025-12-07T17:09:44.582847+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-12-07T17:09:44.582847+00:00'
+[2025-12-07T17:09:46.751+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2025-12-07T17:09:46.769+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-12-07T17:09:46.770+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'docker exec minio-mc mc mb local/gold || true']
+[2025-12-07T17:09:46.787+0000] {subprocess.py:99} INFO - Output:
+[2025-12-07T17:09:47.002+0000] {subprocess.py:106} INFO - Bucket created successfully `local/gold`.
+[2025-12-07T17:09:47.018+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2025-12-07T17:09:47.052+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2025-12-07T17:09:47.053+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=init_project, task_id=create_bucket_gold, run_id=manual__2025-12-07T17:09:44.582847+00:00, execution_date=20251207T170944, start_date=20251207T170946, end_date=20251207T170947
+[2025-12-07T17:09:47.132+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-12-07T17:09:47.166+0000] {taskinstance.py:3924} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-12-07T17:09:47.170+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

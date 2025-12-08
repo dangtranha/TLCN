@@ -1,0 +1,124 @@
+[2025-12-07T19:11:48.471+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-07T19:11:48.497+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_process.Silver_to_Gold_Dimensions manual__2025-12-07T18:59:17.190968+00:00 [queued]>
+[2025-12-07T19:11:48.508+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_process.Silver_to_Gold_Dimensions manual__2025-12-07T18:59:17.190968+00:00 [queued]>
+[2025-12-07T19:11:48.509+0000] {taskinstance.py:2884} INFO - Starting attempt 3 of 3
+[2025-12-07T19:11:48.522+0000] {taskinstance.py:2907} INFO - Executing <Task(BashOperator): Silver_to_Gold_Dimensions> on 2025-12-07 18:59:17.190968+00:00
+[2025-12-07T19:11:48.534+0000] {logging_mixin.py:190} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=1207) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-12-07T19:11:48.536+0000] {standard_task_runner.py:72} INFO - Started process 1208 to run task
+[2025-12-07T19:11:48.534+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'ETL_process', 'Silver_to_Gold_Dimensions', 'manual__2025-12-07T18:59:17.190968+00:00', '--job-id', '31', '--raw', '--subdir', 'DAGS_FOLDER/ETL.py', '--cfg-path', '/tmp/tmpt5kj5hmz']
+[2025-12-07T19:11:48.537+0000] {standard_task_runner.py:105} INFO - Job 31: Subtask Silver_to_Gold_Dimensions
+[2025-12-07T19:11:48.602+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_process.Silver_to_Gold_Dimensions manual__2025-12-07T18:59:17.190968+00:00 [running]> on host 8736f8ce0a1c
+[2025-12-07T19:11:48.681+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='ETL_process' AIRFLOW_CTX_TASK_ID='Silver_to_Gold_Dimensions' AIRFLOW_CTX_EXECUTION_DATE='2025-12-07T18:59:17.190968+00:00' AIRFLOW_CTX_TRY_NUMBER='3' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-12-07T18:59:17.190968+00:00'
+[2025-12-07T19:11:48.682+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2025-12-07T19:11:48.695+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-12-07T19:11:48.697+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "docker exec spark-master bash -c '\n            PYTHONPATH=/opt/spark/work-dir             /opt/spark/bin/spark-submit                 --master spark://spark-master:7077                 --packages io.delta:delta-core_2.12:2.4.0,org.apache.hadoop:hadoop-aws:3.3.4                 --conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension                 --conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog                 /opt/spark/work-dir/batch-etl/silver_to_gold/etl_dimensions.py\n            '\n        "]
+[2025-12-07T19:11:48.711+0000] {subprocess.py:99} INFO - Output:
+[2025-12-07T19:11:50.480+0000] {subprocess.py:106} INFO - :: loading settings :: url = jar:file:/opt/spark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+[2025-12-07T19:11:50.633+0000] {subprocess.py:106} INFO - Ivy Default Cache set to: /root/.ivy2/cache
+[2025-12-07T19:11:50.634+0000] {subprocess.py:106} INFO - The jars for the packages stored in: /root/.ivy2/jars
+[2025-12-07T19:11:50.638+0000] {subprocess.py:106} INFO - io.delta#delta-core_2.12 added as a dependency
+[2025-12-07T19:11:50.639+0000] {subprocess.py:106} INFO - org.apache.hadoop#hadoop-aws added as a dependency
+[2025-12-07T19:11:50.639+0000] {subprocess.py:106} INFO - :: resolving dependencies :: org.apache.spark#spark-submit-parent-0230cb7a-fe55-4271-a4af-ebfae7d81543;1.0
+[2025-12-07T19:11:50.640+0000] {subprocess.py:106} INFO - 	confs: [default]
+[2025-12-07T19:11:50.752+0000] {subprocess.py:106} INFO - 	found io.delta#delta-core_2.12;2.4.0 in central
+[2025-12-07T19:11:50.781+0000] {subprocess.py:106} INFO - 	found io.delta#delta-storage;2.4.0 in central
+[2025-12-07T19:11:50.805+0000] {subprocess.py:106} INFO - 	found org.antlr#antlr4-runtime;4.9.3 in central
+[2025-12-07T19:11:50.864+0000] {subprocess.py:106} INFO - 	found org.apache.hadoop#hadoop-aws;3.3.4 in central
+[2025-12-07T19:11:50.889+0000] {subprocess.py:106} INFO - 	found com.amazonaws#aws-java-sdk-bundle;1.12.262 in central
+[2025-12-07T19:11:50.911+0000] {subprocess.py:106} INFO - 	found org.wildfly.openssl#wildfly-openssl;1.0.7.Final in central
+[2025-12-07T19:11:50.940+0000] {subprocess.py:106} INFO - :: resolution report :: resolve 289ms :: artifacts dl 12ms
+[2025-12-07T19:11:50.941+0000] {subprocess.py:106} INFO - 	:: modules in use:
+[2025-12-07T19:11:50.942+0000] {subprocess.py:106} INFO - 	com.amazonaws#aws-java-sdk-bundle;1.12.262 from central in [default]
+[2025-12-07T19:11:50.943+0000] {subprocess.py:106} INFO - 	io.delta#delta-core_2.12;2.4.0 from central in [default]
+[2025-12-07T19:11:50.944+0000] {subprocess.py:106} INFO - 	io.delta#delta-storage;2.4.0 from central in [default]
+[2025-12-07T19:11:50.944+0000] {subprocess.py:106} INFO - 	org.antlr#antlr4-runtime;4.9.3 from central in [default]
+[2025-12-07T19:11:50.945+0000] {subprocess.py:106} INFO - 	org.apache.hadoop#hadoop-aws;3.3.4 from central in [default]
+[2025-12-07T19:11:50.946+0000] {subprocess.py:106} INFO - 	org.wildfly.openssl#wildfly-openssl;1.0.7.Final from central in [default]
+[2025-12-07T19:11:50.946+0000] {subprocess.py:106} INFO - 	---------------------------------------------------------------------
+[2025-12-07T19:11:50.947+0000] {subprocess.py:106} INFO - 	|                  |            modules            ||   artifacts   |
+[2025-12-07T19:11:50.947+0000] {subprocess.py:106} INFO - 	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+[2025-12-07T19:11:50.948+0000] {subprocess.py:106} INFO - 	---------------------------------------------------------------------
+[2025-12-07T19:11:50.949+0000] {subprocess.py:106} INFO - 	|      default     |   6   |   0   |   0   |   0   ||   6   |   0   |
+[2025-12-07T19:11:50.949+0000] {subprocess.py:106} INFO - 	---------------------------------------------------------------------
+[2025-12-07T19:11:50.951+0000] {subprocess.py:106} INFO - :: retrieving :: org.apache.spark#spark-submit-parent-0230cb7a-fe55-4271-a4af-ebfae7d81543
+[2025-12-07T19:11:50.952+0000] {subprocess.py:106} INFO - 	confs: [default]
+[2025-12-07T19:11:50.962+0000] {subprocess.py:106} INFO - 	0 artifacts copied, 6 already retrieved (0kB/11ms)
+[2025-12-07T19:11:51.179+0000] {subprocess.py:106} INFO - 25/12/07 19:11:51 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[2025-12-07T19:11:51.957+0000] {subprocess.py:106} INFO - Traceback (most recent call last):
+[2025-12-07T19:11:51.957+0000] {subprocess.py:106} INFO -   File "/opt/spark/work-dir/batch-etl/silver_to_gold/etl_dimensions.py", line 9, in <module>
+[2025-12-07T19:11:51.960+0000] {subprocess.py:106} INFO -     from core.gold_utils import get_spark_session, SILVER_PATH, write_gold_delta
+[2025-12-07T19:11:51.960+0000] {subprocess.py:106} INFO - ModuleNotFoundError: No module named 'core'
+[2025-12-07T19:11:52.000+0000] {subprocess.py:106} INFO - 25/12/07 19:11:51 INFO ShutdownHookManager: Shutdown hook called
+[2025-12-07T19:11:52.001+0000] {subprocess.py:106} INFO - 25/12/07 19:11:52 INFO ShutdownHookManager: Deleting directory /tmp/spark-63e13dac-aae6-4ee1-b31a-634b129fcd15
+[2025-12-07T19:11:52.086+0000] {subprocess.py:110} INFO - Command exited with return code 1
+[2025-12-07T19:11:52.102+0000] {taskinstance.py:3336} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 776, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 742, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 276, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2025-12-07T19:11:52.107+0000] {taskinstance.py:1242} INFO - Marking task as FAILED. dag_id=ETL_process, task_id=Silver_to_Gold_Dimensions, run_id=manual__2025-12-07T18:59:17.190968+00:00, execution_date=20251207T185917, start_date=20251207T191148, end_date=20251207T191152
+[2025-12-07T19:11:52.141+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2025-12-07T19:11:52.142+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 31 for task Silver_to_Gold_Dimensions (Bash command failed. The command returned a non-zero exit code 1.; 1208)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3029, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 282, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3184, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3208, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 776, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 742, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 276, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2025-12-07T19:11:52.166+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2025-12-07T19:11:52.192+0000] {taskinstance.py:3924} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-12-07T19:11:52.197+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

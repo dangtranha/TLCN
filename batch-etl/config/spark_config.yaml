@@ -1,0 +1,12 @@
+spark:
+  shuffle_partitions: 200
+
+minio:
+  endpoint: minio:9000
+  access_key: minioadmin
+  secret_key: minioadmin
+  ssl: false
+
+buckets:
+  bronze: bronze
+  silver: silver

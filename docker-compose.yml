@@ -1,15 +1,36 @@
 services:
-  mongodb:
-    image: mongo:6.0
-    container_name: mongodb
+  postgres:
+    image: postgres:13
+    container_name: postgres_source
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: erp_db
     ports:
-      - "27017:27017"
-    command: ["mongod", "--replSet", "rs0", "--bind_ip_all","--noauth"]
+      - "5432:5432"
     volumes:
-      - ./mongodb/init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./import/Data/processed:/import_data
+    networks:
+      - data-pipeline-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - data-pipeline-network
 
   kafka:
     image: confluentinc/cp-kafka:7.3.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
     ports:
       - "9092:9092"
     environment:
@@ -17,21 +38,16 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      # AWS_ACCESS_KEY_ID: minioadmin
-      # AWS_SECRET_ACCESS_KEY: minioadmin
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.0
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - data-pipeline-network
 
   connect:
     image: debezium/connect:2.1
+    container_name: debezium_connect
+    depends_on:
+      - kafka
+      - postgres
     ports:
       - "8083:8083"
     environment:
@@ -40,40 +56,11 @@ services:
       OFFSET_STORAGE_TOPIC: my_connect_offsets
       STATUS_STORAGE_TOPIC: my_connect_statuses
       BOOTSTRAP_SERVERS: kafka:29092
-      CONNECT_PLUGIN_PATH: /kafka/connect,/kafka/connect/s3
+      CONNECT_PLUGIN_PATH: /kafka/connect,/kafka/connect/plugins
     volumes:
-      - ./debezium/plugins:/kafka/connect/s3
-    depends_on:
-      - kafka
-
-  spark-master:
-    image: apache/spark:3.4.0
-    container_name: spark-master
-    command: >
-      /opt/spark/bin/spark-class
-      org.apache.spark.deploy.master.Master
-      --host spark-master
-    ports:
-      - "7077:7077"
-      - "8080:8080"
-    environment:
-      - SPARK_NO_DAEMONIZE=true
-      - MINIO_ENDPOINT=http://minio:9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=minioadmin
-      - MINIO_BUCKET=data-lake
-
-  spark-worker:
-    image: apache/spark:3.4.0
-    container_name: spark-worker
-    depends_on:
-      - spark-master
-    command: >
-      /opt/spark/bin/spark-class
-      org.apache.spark.deploy.worker.Worker
-      spark://spark-master:7077
-    environment:
-      - SPARK_NO_DAEMONIZE=true
+      - ./debezium/plugins:/kafka/connect/plugins
+    networks:
+      - data-pipeline-network
 
   minio:
     image: quay.io/minio/minio:latest
@@ -86,8 +73,117 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
-      - ./minio/bucket:/data
+      - minio_data:/data
+    networks:
+      - data-pipeline-network
+  minio-mc:
+    image: minio/mc
+    container_name: minio-mc
+    entrypoint: sleep infinity
+    networks:
+      - data-pipeline-network
+  spark-master:
+    image: apache/spark:3.4.0
+    container_name: spark-master
+    command: >
+      /opt/spark/bin/spark-class
+      org.apache.spark.deploy.master.Master
+      --host spark-master
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    environment:
+      # Postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: tlcn
+      POSTGRES_USER: etl
+      POSTGRES_PASSWORD: etl123
 
+      # MinIO
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_SSL: "false"
+
+      BRONZE_BUCKET: bronze
+      SILVER_BUCKET: silver
+
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+    volumes:
+      - ./batch-etl:/opt/spark/work-dir/batch-etl
+      - ./batch-etl/jars/postgresql-42.7.1.jar:/opt/spark/jars/postgresql-42.7.1.jar
+
+    networks:
+      - data-pipeline-network
+    
+  spark-worker:
+    image: apache/spark:3.4.0
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    command: >
+      /opt/spark/bin/spark-class
+      org.apache.spark.deploy.worker.Worker
+      spark://spark-master:7077
+    environment:
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+    volumes:
+      - ./batch-etl:/opt/spark/work-dir/batch-etl
+    networks:
+      - data-pipeline-network
+  
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    networks:
+      - data-pipeline-network
+    depends_on:
+      - postgres
+
+  airflow:
+    image: apache/airflow:2.11.0
+    container_name: airflow
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: "LocalExecutor"
+      AIRFLOW__CORE__AUTH_MANAGER: airflow.providers.fab.auth_manager.fab_auth_manager.FabAuthManager
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres_source:5432/airflow_db
+      AIRFLOW__LOGGING__LOGGING_LEVEL: INFO
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/airflow_logs:/opt/airflow/logs
+      - ./debezium/config:/opt/debezium_config
+      - /var/run/docker.sock:/var/run/docker.sock 
+    ports:
+      - "8081:8080"
+    networks:
+      - data-pipeline-network
+    command: >
+      bash -c "
+        until pg_isready -h postgres_source -U postgres; do
+          echo 'Waiting for Postgres...';
+          sleep 20;
+        done;
+        airflow db init;
+        airflow db migrate;
+        airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin;
+        airflow scheduler &
+        airflow webserver
+      "
+    depends_on:
+      - postgres
 networks:
-  default:
-    name: data-pipeline-network
+  data-pipeline-network:
+    driver: bridge
+volumes:
+  postgres_data:
+  minio_data:
+  superset_home:
