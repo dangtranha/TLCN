@@ -1,0 +1,259 @@
+[2025-12-16T03:31:36.773+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-16T03:31:36.816+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ETL_process.Silver_to_Gold_Facts manual__2025-12-16T03:11:21.775359+00:00 [queued]>
+[2025-12-16T03:31:36.831+0000] {taskinstance.py:2631} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ETL_process.Silver_to_Gold_Facts manual__2025-12-16T03:11:21.775359+00:00 [queued]>
+[2025-12-16T03:31:36.832+0000] {taskinstance.py:2884} INFO - Starting attempt 1 of 3
+[2025-12-16T03:31:36.852+0000] {taskinstance.py:2907} INFO - Executing <Task(BashOperator): Silver_to_Gold_Facts> on 2025-12-16 03:11:21.775359+00:00
+[2025-12-16T03:31:36.868+0000] {logging_mixin.py:190} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=869) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-12-16T03:31:36.870+0000] {standard_task_runner.py:72} INFO - Started process 870 to run task
+[2025-12-16T03:31:36.868+0000] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'ETL_process', 'Silver_to_Gold_Facts', 'manual__2025-12-16T03:11:21.775359+00:00', '--job-id', '26', '--raw', '--subdir', 'DAGS_FOLDER/ETL.py', '--cfg-path', '/tmp/tmp0rn1jbfw']
+[2025-12-16T03:31:36.872+0000] {standard_task_runner.py:105} INFO - Job 26: Subtask Silver_to_Gold_Facts
+[2025-12-16T03:31:36.951+0000] {task_command.py:467} INFO - Running <TaskInstance: ETL_process.Silver_to_Gold_Facts manual__2025-12-16T03:11:21.775359+00:00 [running]> on host 2a50f1bacb3c
+[2025-12-16T03:31:37.070+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='ETL_process' AIRFLOW_CTX_TASK_ID='Silver_to_Gold_Facts' AIRFLOW_CTX_EXECUTION_DATE='2025-12-16T03:11:21.775359+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-12-16T03:11:21.775359+00:00'
+[2025-12-16T03:31:37.075+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2025-12-16T03:31:37.091+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-12-16T03:31:37.094+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'docker exec spark-master bash -c \'\n            export PYTHONPATH=/opt/spark/work-dir/batch-etl && \n            /opt/spark/bin/spark-submit                 --master spark://spark-master:7077                 --packages io.delta:delta-core_2.12:2.4.0,org.apache.hadoop:hadoop-aws:3.3.4                 --conf "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension"                 --conf "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog"                 /opt/spark/work-dir/batch-etl/silver_to_gold/etl_facts.py\n            \'\n        ']
+[2025-12-16T03:31:37.113+0000] {subprocess.py:99} INFO - Output:
+[2025-12-16T03:31:39.384+0000] {subprocess.py:106} INFO - :: loading settings :: url = jar:file:/opt/spark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+[2025-12-16T03:31:39.527+0000] {subprocess.py:106} INFO - Ivy Default Cache set to: /root/.ivy2/cache
+[2025-12-16T03:31:39.527+0000] {subprocess.py:106} INFO - The jars for the packages stored in: /root/.ivy2/jars
+[2025-12-16T03:31:39.534+0000] {subprocess.py:106} INFO - io.delta#delta-core_2.12 added as a dependency
+[2025-12-16T03:31:39.535+0000] {subprocess.py:106} INFO - org.apache.hadoop#hadoop-aws added as a dependency
+[2025-12-16T03:31:39.536+0000] {subprocess.py:106} INFO - :: resolving dependencies :: org.apache.spark#spark-submit-parent-11519dcd-1c60-435b-8f99-5f8a0c1831df;1.0
+[2025-12-16T03:31:39.536+0000] {subprocess.py:106} INFO - 	confs: [default]
+[2025-12-16T03:31:39.675+0000] {subprocess.py:106} INFO - 	found io.delta#delta-core_2.12;2.4.0 in central
+[2025-12-16T03:31:39.714+0000] {subprocess.py:106} INFO - 	found io.delta#delta-storage;2.4.0 in central
+[2025-12-16T03:31:39.746+0000] {subprocess.py:106} INFO - 	found org.antlr#antlr4-runtime;4.9.3 in central
+[2025-12-16T03:31:39.812+0000] {subprocess.py:106} INFO - 	found org.apache.hadoop#hadoop-aws;3.3.4 in central
+[2025-12-16T03:31:39.845+0000] {subprocess.py:106} INFO - 	found com.amazonaws#aws-java-sdk-bundle;1.12.262 in central
+[2025-12-16T03:31:39.872+0000] {subprocess.py:106} INFO - 	found org.wildfly.openssl#wildfly-openssl;1.0.7.Final in central
+[2025-12-16T03:31:39.904+0000] {subprocess.py:106} INFO - :: resolution report :: resolve 354ms :: artifacts dl 15ms
+[2025-12-16T03:31:39.905+0000] {subprocess.py:106} INFO - 	:: modules in use:
+[2025-12-16T03:31:39.906+0000] {subprocess.py:106} INFO - 	com.amazonaws#aws-java-sdk-bundle;1.12.262 from central in [default]
+[2025-12-16T03:31:39.907+0000] {subprocess.py:106} INFO - 	io.delta#delta-core_2.12;2.4.0 from central in [default]
+[2025-12-16T03:31:39.908+0000] {subprocess.py:106} INFO - 	io.delta#delta-storage;2.4.0 from central in [default]
+[2025-12-16T03:31:39.909+0000] {subprocess.py:106} INFO - 	org.antlr#antlr4-runtime;4.9.3 from central in [default]
+[2025-12-16T03:31:39.910+0000] {subprocess.py:106} INFO - 	org.apache.hadoop#hadoop-aws;3.3.4 from central in [default]
+[2025-12-16T03:31:39.911+0000] {subprocess.py:106} INFO - 	org.wildfly.openssl#wildfly-openssl;1.0.7.Final from central in [default]
+[2025-12-16T03:31:39.912+0000] {subprocess.py:106} INFO - 	---------------------------------------------------------------------
+[2025-12-16T03:31:39.913+0000] {subprocess.py:106} INFO - 	|                  |            modules            ||   artifacts   |
+[2025-12-16T03:31:39.914+0000] {subprocess.py:106} INFO - 	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+[2025-12-16T03:31:39.915+0000] {subprocess.py:106} INFO - 	---------------------------------------------------------------------
+[2025-12-16T03:31:39.915+0000] {subprocess.py:106} INFO - 	|      default     |   6   |   0   |   0   |   0   ||   6   |   0   |
+[2025-12-16T03:31:39.916+0000] {subprocess.py:106} INFO - 	---------------------------------------------------------------------
+[2025-12-16T03:31:39.917+0000] {subprocess.py:106} INFO - :: retrieving :: org.apache.spark#spark-submit-parent-11519dcd-1c60-435b-8f99-5f8a0c1831df
+[2025-12-16T03:31:39.918+0000] {subprocess.py:106} INFO - 	confs: [default]
+[2025-12-16T03:31:39.928+0000] {subprocess.py:106} INFO - 	0 artifacts copied, 6 already retrieved (0kB/13ms)
+[2025-12-16T03:31:40.212+0000] {subprocess.py:106} INFO - 25/12/16 03:31:40 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[2025-12-16T03:31:41.354+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SparkContext: Running Spark version 3.4.0
+[2025-12-16T03:31:41.393+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO ResourceUtils: ==============================================================
+[2025-12-16T03:31:41.395+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO ResourceUtils: No custom resources configured for spark.driver.
+[2025-12-16T03:31:41.396+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO ResourceUtils: ==============================================================
+[2025-12-16T03:31:41.397+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SparkContext: Submitted application: Gold_Facts_ETL
+[2025-12-16T03:31:41.431+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[2025-12-16T03:31:41.447+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO ResourceProfile: Limiting resource is cpu
+[2025-12-16T03:31:41.448+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[2025-12-16T03:31:41.529+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SecurityManager: Changing view acls to: root
+[2025-12-16T03:31:41.530+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SecurityManager: Changing modify acls to: root
+[2025-12-16T03:31:41.531+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SecurityManager: Changing view acls groups to:
+[2025-12-16T03:31:41.531+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SecurityManager: Changing modify acls groups to:
+[2025-12-16T03:31:41.532+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: root; groups with view permissions: EMPTY; users with modify permissions: root; groups with modify permissions: EMPTY
+[2025-12-16T03:31:41.931+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO Utils: Successfully started service 'sparkDriver' on port 38211.
+[2025-12-16T03:31:41.979+0000] {subprocess.py:106} INFO - 25/12/16 03:31:41 INFO SparkEnv: Registering MapOutputTracker
+[2025-12-16T03:31:42.048+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkEnv: Registering BlockManagerMaster
+[2025-12-16T03:31:42.088+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[2025-12-16T03:31:42.089+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[2025-12-16T03:31:42.097+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[2025-12-16T03:31:42.129+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-f46e7d4f-1536-4e91-b8f2-7b2af9e3bda8
+[2025-12-16T03:31:42.157+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO MemoryStore: MemoryStore started with capacity 434.4 MiB
+[2025-12-16T03:31:42.191+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkEnv: Registering OutputCommitCoordinator
+[2025-12-16T03:31:42.418+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+[2025-12-16T03:31:42.532+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+[2025-12-16T03:31:42.555+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO Utils: Successfully started service 'SparkUI' on port 4041.
+[2025-12-16T03:31:42.627+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added JAR file:///root/.ivy2/jars/io.delta_delta-core_2.12-2.4.0.jar at spark://3ad9a82189be:38211/jars/io.delta_delta-core_2.12-2.4.0.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.628+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added JAR file:///root/.ivy2/jars/org.apache.hadoop_hadoop-aws-3.3.4.jar at spark://3ad9a82189be:38211/jars/org.apache.hadoop_hadoop-aws-3.3.4.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.629+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added JAR file:///root/.ivy2/jars/io.delta_delta-storage-2.4.0.jar at spark://3ad9a82189be:38211/jars/io.delta_delta-storage-2.4.0.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.631+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added JAR file:///root/.ivy2/jars/org.antlr_antlr4-runtime-4.9.3.jar at spark://3ad9a82189be:38211/jars/org.antlr_antlr4-runtime-4.9.3.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.631+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added JAR file:///root/.ivy2/jars/com.amazonaws_aws-java-sdk-bundle-1.12.262.jar at spark://3ad9a82189be:38211/jars/com.amazonaws_aws-java-sdk-bundle-1.12.262.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.632+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added JAR file:///root/.ivy2/jars/org.wildfly.openssl_wildfly-openssl-1.0.7.Final.jar at spark://3ad9a82189be:38211/jars/org.wildfly.openssl_wildfly-openssl-1.0.7.Final.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.635+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added file file:///root/.ivy2/jars/io.delta_delta-core_2.12-2.4.0.jar at spark://3ad9a82189be:38211/files/io.delta_delta-core_2.12-2.4.0.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.638+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO Utils: Copying /root/.ivy2/jars/io.delta_delta-core_2.12-2.4.0.jar to /tmp/spark-cf98edc6-4052-4049-9119-c05ceb5a6ee8/userFiles-0c4dfe83-b741-4b93-8136-6d1579b02b75/io.delta_delta-core_2.12-2.4.0.jar
+[2025-12-16T03:31:42.671+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added file file:///root/.ivy2/jars/org.apache.hadoop_hadoop-aws-3.3.4.jar at spark://3ad9a82189be:38211/files/org.apache.hadoop_hadoop-aws-3.3.4.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.672+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO Utils: Copying /root/.ivy2/jars/org.apache.hadoop_hadoop-aws-3.3.4.jar to /tmp/spark-cf98edc6-4052-4049-9119-c05ceb5a6ee8/userFiles-0c4dfe83-b741-4b93-8136-6d1579b02b75/org.apache.hadoop_hadoop-aws-3.3.4.jar
+[2025-12-16T03:31:42.686+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added file file:///root/.ivy2/jars/io.delta_delta-storage-2.4.0.jar at spark://3ad9a82189be:38211/files/io.delta_delta-storage-2.4.0.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.688+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO Utils: Copying /root/.ivy2/jars/io.delta_delta-storage-2.4.0.jar to /tmp/spark-cf98edc6-4052-4049-9119-c05ceb5a6ee8/userFiles-0c4dfe83-b741-4b93-8136-6d1579b02b75/io.delta_delta-storage-2.4.0.jar
+[2025-12-16T03:31:42.698+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added file file:///root/.ivy2/jars/org.antlr_antlr4-runtime-4.9.3.jar at spark://3ad9a82189be:38211/files/org.antlr_antlr4-runtime-4.9.3.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.699+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO Utils: Copying /root/.ivy2/jars/org.antlr_antlr4-runtime-4.9.3.jar to /tmp/spark-cf98edc6-4052-4049-9119-c05ceb5a6ee8/userFiles-0c4dfe83-b741-4b93-8136-6d1579b02b75/org.antlr_antlr4-runtime-4.9.3.jar
+[2025-12-16T03:31:42.711+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO SparkContext: Added file file:///root/.ivy2/jars/com.amazonaws_aws-java-sdk-bundle-1.12.262.jar at spark://3ad9a82189be:38211/files/com.amazonaws_aws-java-sdk-bundle-1.12.262.jar with timestamp 1765855901343
+[2025-12-16T03:31:42.712+0000] {subprocess.py:106} INFO - 25/12/16 03:31:42 INFO Utils: Copying /root/.ivy2/jars/com.amazonaws_aws-java-sdk-bundle-1.12.262.jar to /tmp/spark-cf98edc6-4052-4049-9119-c05ceb5a6ee8/userFiles-0c4dfe83-b741-4b93-8136-6d1579b02b75/com.amazonaws_aws-java-sdk-bundle-1.12.262.jar
+[2025-12-16T03:31:43.663+0000] {subprocess.py:106} INFO - 25/12/16 03:31:43 INFO SparkContext: Added file file:///root/.ivy2/jars/org.wildfly.openssl_wildfly-openssl-1.0.7.Final.jar at spark://3ad9a82189be:38211/files/org.wildfly.openssl_wildfly-openssl-1.0.7.Final.jar with timestamp 1765855901343
+[2025-12-16T03:31:43.665+0000] {subprocess.py:106} INFO - 25/12/16 03:31:43 INFO Utils: Copying /root/.ivy2/jars/org.wildfly.openssl_wildfly-openssl-1.0.7.Final.jar to /tmp/spark-cf98edc6-4052-4049-9119-c05ceb5a6ee8/userFiles-0c4dfe83-b741-4b93-8136-6d1579b02b75/org.wildfly.openssl_wildfly-openssl-1.0.7.Final.jar
+[2025-12-16T03:31:43.920+0000] {subprocess.py:106} INFO - 25/12/16 03:31:43 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+[2025-12-16T03:31:44.032+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO TransportClientFactory: Successfully created connection to spark-master/172.18.0.5:7077 after 66 ms (0 ms spent in bootstraps)
+[2025-12-16T03:31:44.232+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20251216033144-0007
+[2025-12-16T03:31:44.253+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 33123.
+[2025-12-16T03:31:44.255+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO NettyBlockTransferService: Server created on 3ad9a82189be:33123
+[2025-12-16T03:31:44.260+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[2025-12-16T03:31:44.278+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 3ad9a82189be, 33123, None)
+[2025-12-16T03:31:44.286+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO BlockManagerMasterEndpoint: Registering block manager 3ad9a82189be:33123 with 434.4 MiB RAM, BlockManagerId(driver, 3ad9a82189be, 33123, None)
+[2025-12-16T03:31:44.293+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 3ad9a82189be, 33123, None)
+[2025-12-16T03:31:44.296+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 3ad9a82189be, 33123, None)
+[2025-12-16T03:31:44.633+0000] {subprocess.py:106} INFO - 25/12/16 03:31:44 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+[2025-12-16T03:31:45.023+0000] {subprocess.py:106} INFO - Processing Fact Sales...
+[2025-12-16T03:31:45.034+0000] {subprocess.py:106} INFO - 25/12/16 03:31:45 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir.
+[2025-12-16T03:31:45.038+0000] {subprocess.py:106} INFO - 25/12/16 03:31:45 INFO SharedState: Warehouse path is 'file:/opt/spark/work-dir/spark-warehouse'.
+[2025-12-16T03:31:46.855+0000] {subprocess.py:106} INFO - 25/12/16 03:31:46 WARN MetricsConfig: Cannot locate configuration: tried hadoop-metrics2-s3a-file-system.properties,hadoop-metrics2.properties
+[2025-12-16T03:31:46.877+0000] {subprocess.py:106} INFO - 25/12/16 03:31:46 INFO MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+[2025-12-16T03:31:46.878+0000] {subprocess.py:106} INFO - 25/12/16 03:31:46 INFO MetricsSystemImpl: s3a-file-system metrics system started
+[2025-12-16T03:31:49.280+0000] {subprocess.py:106} INFO - 25/12/16 03:31:49 INFO DelegatingLogStore: LogStore `LogStoreAdapter(io.delta.storage.S3SingleDriverLogStore)` is used for scheme `s3a`
+[2025-12-16T03:31:49.439+0000] {subprocess.py:106} INFO - 25/12/16 03:31:49 INFO DeltaLog: Loading version 1.
+[2025-12-16T03:31:52.132+0000] {subprocess.py:106} INFO - 25/12/16 03:31:52 INFO DeltaLogFileIndex: Created DeltaLogFileIndex(JSON, numFilesInSegment: 2, totalFileSize: 12959832)
+[2025-12-16T03:31:53.921+0000] {subprocess.py:106} INFO - 25/12/16 03:31:53 INFO FileSourceStrategy: Pushed Filters:
+[2025-12-16T03:31:53.922+0000] {subprocess.py:106} INFO - 25/12/16 03:31:53 INFO FileSourceStrategy: Post-Scan Filters:
+[2025-12-16T03:31:54.930+0000] {subprocess.py:106} INFO - 25/12/16 03:31:54 INFO CodeGenerator: Code generated in 538.929049 ms
+[2025-12-16T03:31:55.075+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 212.7 KiB, free 434.2 MiB)
+[2025-12-16T03:31:55.195+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 36.3 KiB, free 434.2 MiB)
+[2025-12-16T03:31:55.202+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on 3ad9a82189be:33123 (size: 36.3 KiB, free: 434.4 MiB)
+[2025-12-16T03:31:55.211+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO SparkContext: Created broadcast 0 from toString at <unknown>:0
+[2025-12-16T03:31:55.270+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO FileSourceScanExec: Planning scan with bin packing, max size: 10674220 bytes, open cost is considered as scanning 4194304 bytes.
+[2025-12-16T03:31:55.532+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO SparkContext: Starting job: toString at <unknown>:0
+[2025-12-16T03:31:55.570+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO DAGScheduler: Got job 0 (toString at <unknown>:0) with 2 output partitions
+[2025-12-16T03:31:55.571+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO DAGScheduler: Final stage: ResultStage 0 (toString at <unknown>:0)
+[2025-12-16T03:31:55.572+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO DAGScheduler: Parents of final stage: List()
+[2025-12-16T03:31:55.575+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO DAGScheduler: Missing parents: List()
+[2025-12-16T03:31:55.585+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[3] at toString at <unknown>:0), which has no missing parents
+[2025-12-16T03:31:55.637+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 50.4 KiB, free 434.1 MiB)
+[2025-12-16T03:31:55.661+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 15.5 KiB, free 434.1 MiB)
+[2025-12-16T03:31:55.663+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on 3ad9a82189be:33123 (size: 15.5 KiB, free: 434.3 MiB)
+[2025-12-16T03:31:55.664+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO SparkContext: Created broadcast 1 from broadcast at DAGScheduler.scala:1535
+[2025-12-16T03:31:55.724+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO DAGScheduler: Submitting 2 missing tasks from ResultStage 0 (MapPartitionsRDD[3] at toString at <unknown>:0) (first 15 tasks are for partitions Vector(0, 1))
+[2025-12-16T03:31:55.725+0000] {subprocess.py:106} INFO - 25/12/16 03:31:55 INFO TaskSchedulerImpl: Adding task set 0.0 with 2 tasks resource profile 0
+[2025-12-16T03:32:10.775+0000] {subprocess.py:106} INFO - 25/12/16 03:32:10 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2025-12-16T03:32:25.783+0000] {subprocess.py:106} INFO - 25/12/16 03:32:25 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2025-12-16T03:32:27.585+0000] {local_task_job_runner.py:346} WARNING - State of this instance has been externally set to failed. Terminating instance.
+[2025-12-16T03:32:27.587+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2025-12-16T03:32:27.593+0000] {process_utils.py:132} INFO - Sending 15 to group 870. PIDs of all processes in the group: [872, 873, 870]
+[2025-12-16T03:32:27.595+0000] {process_utils.py:87} INFO - Sending the signal 15 to group 870
+[2025-12-16T03:32:27.596+0000] {taskinstance.py:3117} ERROR - Received SIGTERM. Terminating subprocesses.
+[2025-12-16T03:32:27.618+0000] {taskinstance.py:3118} ERROR - Stacktrace: 
+  File "/home/airflow/.local/bin/airflow", line 8, in <module>
+    sys.exit(main())
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/__main__.py", line 62, in main
+    args.func(args)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/providers_configuration_loader.py", line 55, in wrapped_function
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/scheduler_command.py", line 56, in scheduler
+    run_command_with_daemon_option(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/daemon_utils.py", line 86, in run_command_with_daemon_option
+    callback()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/scheduler_command.py", line 59, in <lambda>
+    callback=lambda: _run_scheduler_job(args),
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/scheduler_command.py", line 47, in _run_scheduler_job
+    run_job(job=job_runner.job, execute_callable=job_runner._execute)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 421, in run_job
+    return execute_job(job, execute_callable=execute_callable)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 450, in execute_job
+    ret = execute_callable()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/scheduler_job_runner.py", line 990, in _execute
+    executor.start()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/executors/local_executor.py", line 392, in start
+    self.impl.start()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/executors/local_executor.py", line 330, in start
+    worker.start()
+  File "/usr/local/lib/python3.12/multiprocessing/process.py", line 121, in start
+    self._popen = self._Popen(self)
+  File "/usr/local/lib/python3.12/multiprocessing/context.py", line 224, in _Popen
+    return _default_context.get_context().Process._Popen(process_obj)
+  File "/usr/local/lib/python3.12/multiprocessing/context.py", line 282, in _Popen
+    return Popen(process_obj)
+  File "/usr/local/lib/python3.12/multiprocessing/popen_fork.py", line 19, in __init__
+    self._launch(process_obj)
+  File "/usr/local/lib/python3.12/multiprocessing/popen_fork.py", line 71, in _launch
+    code = process_obj._bootstrap(parent_sentinel=child_r)
+  File "/usr/local/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/executors/local_executor.py", line 80, in run
+    return super().run()
+  File "/usr/local/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/traces/tracer.py", line 58, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/executors/local_executor.py", line 211, in do_work
+    self.execute_work(key=key, command=command)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/traces/tracer.py", line 58, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/executors/local_executor.py", line 100, in execute_work
+    state = self._execute_work_in_fork(command)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/traces/tracer.py", line 58, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/executors/local_executor.py", line 142, in _execute_work_in_fork
+    args.func(args)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 254, in _run_task_by_selected_method
+    return _run_task_by_local_task_job(args, ti)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 322, in _run_task_by_local_task_job
+    ret = run_job(job=job_runner.job, execute_callable=job_runner._execute)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 421, in run_job
+    return execute_job(job, execute_callable=execute_callable)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 450, in execute_job
+    ret = execute_callable()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/local_task_job_runner.py", line 171, in _execute
+    self.task_runner.start()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 55, in start
+    self.process = self._start_by_fork()
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3029, in _run_raw_task
+    return _run_raw_task(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 282, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3184, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3208, in _execute_task
+    return _execute_task(self, context, task_orig)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 776, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 742, in _execute_callable
+    return ExecutionCallableRunner(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 257, in execute
+    result = self._run_inline_command(bash_path=bash_path, env=env)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 284, in _run_inline_command
+    return self.subprocess_hook.run_command(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/hooks/subprocess.py", line 104, in run_command
+    for raw_line in iter(self.sub_process.stdout.readline, b""):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3118, in signal_handler
+    self.log.error("Stacktrace: \n%s", "".join(traceback.format_stack()))
+
+[2025-12-16T03:32:27.620+0000] {subprocess.py:117} INFO - Sending SIGTERM signal to process group
+[2025-12-16T03:32:27.721+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2025-12-16T03:32:27.776+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=872, status='terminated', started='03:31:36') (872) terminated with exit code None
+[2025-12-16T03:32:27.777+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=870, status='terminated', exitcode=0, started='03:31:36') (870) terminated with exit code 0
+[2025-12-16T03:32:27.780+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=873, status='terminated', started='03:31:36') (873) terminated with exit code None
